@@ -1,4 +1,5 @@
 import 'package:amlportal/controllers/library_controller.dart';
+import 'package:amlportal/widgets/verticalstraightCard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -18,46 +19,49 @@ class LibraryScreen extends StatelessWidget {
       controller: refreshController,
       enablePullDown: true,
       enablePullUp: true,
-      onRefresh: () async{
+      onRefresh: () async {
         await libraryController.getLibraryComic(false);
         refreshController.refreshCompleted();
       },
-      onLoading: () async{
+      onLoading: () async {
         await libraryController.getLibraryComic(true);
         refreshController.loadComplete();
       },
-      child: SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.all(VSizes.xs),
-            child: Column(
-              children: [
-                Obx((){
-                  if (libraryController.comicList.isEmpty){
-                    //return const SizedBox(height: 0.0,);
-                    return Center(child: Image.asset('assets/bg.png', opacity: const AlwaysStoppedAnimation(.1)));
-                    // return Center(child: IconButton(onPressed: () async {
-                    //   await refreshController.requestRefresh();
-                    // },
-                    //     icon: Icon(
-                    //       Icons.refresh, color: Colors.deepOrangeAccent.withOpacity(0.3), size: 100,)));
-                  }
-                  else{
-                    return ListView.builder(
-                        itemCount: libraryController.comicList.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (_, index) {
-                          return Padding(
-                            padding:
-                            const EdgeInsets.only(right: VSizes.xs),
-                            child: ComicCard(comic: libraryController.comicList[index], horizontal: false,),
-                          );
-                        });
-                  }
-                }),
-              ],
-            )
+      child: Padding(
+        padding: const EdgeInsets.all(VSizes.xs),
+        child: ListView(
+          children: [
+            Divider(color: Colors.white,),
+            Center(child: Text("My Library",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)),
+
+            Obx(() {
+              if (libraryController.comicList.isEmpty) {
+                return Center(
+                  child: Image.asset(
+                    'assets/bg.png',
+                    opacity: const AlwaysStoppedAnimation(.1),
+                  ),
+                );
+              } else {
+                return GridView.builder(
+                  itemCount: libraryController.comicList.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, // Number of columns in the grid
+                    // Spacing between columns
+                    childAspectRatio: 0.6, // Width to height ratio of each grid item
+                  ),
+                  itemBuilder: (_, index) {
+                    return ComicVerticalStraightCard(
+                      comic: libraryController.comicList[index],
+
+                    );
+                  },
+                );
+              }
+            }),
+          ]
         ),
       ),
     );

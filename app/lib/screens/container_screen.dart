@@ -32,9 +32,10 @@ class ContainerScreen extends StatelessWidget {
                   ? 'ABMICS'
                   : homeController.dataService.user.value.display_name,
               style: Theme.of(context).textTheme.titleLarge!.apply(
-                  color: Colors.white,
-                  fontFamily: 'Corsiva',
-                  fontWeightDelta: 15),
+                color: Colors.white,
+                fontFamily: 'Corsiva',
+                fontWeightDelta: 15,
+              ),
             ),
           ),
         ),
@@ -82,15 +83,17 @@ class ContainerScreen extends StatelessWidget {
             ),
           ),
           IconButton(
-              onPressed: () {
-                Get.to(() => const SearchScreen());
-              },
-              icon: const Icon(Icons.search, color: Colors.white)),
+            onPressed: () {
+              Get.to(() => const SearchScreen());
+            },
+            icon: const Icon(Icons.search, color: Colors.white),
+          ),
           IconButton(
-              onPressed: () async {
-                await _handleDrawer();
-              },
-              icon: const Icon(Icons.menu, color: Colors.white)),
+            onPressed: () async {
+              await _handleDrawer();
+            },
+            icon: const Icon(Icons.menu, color: Colors.white),
+          ),
         ],
       ),
       endDrawer: Drawer(
@@ -129,22 +132,23 @@ class ContainerScreen extends StatelessWidget {
                     bgColor = Colors.red;
                   }
                   return ElevatedButton(
-                      onPressed: () async {
-                        if (homeController.dataService.user.value.display_name
-                            .isEmpty) {
-                          await homeController.showLoginAndSignUp(false);
-                        } else {
-                          await homeController.showLogOut(
-                              homeController.selectedIndex.value == 3);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(backgroundColor: bgColor),
-                      child: Text(
-                        str,
-                        style: Theme.of(context).textTheme.titleMedium!.apply(
-                          color: Colors.white,
-                        ),
-                      ));
+                    onPressed: () async {
+                      if (homeController.dataService.user.value.display_name
+                          .isEmpty) {
+                        await homeController.showLoginAndSignUp(false);
+                      } else {
+                        await homeController.showLogOut(
+                            homeController.selectedIndex.value == 3);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: bgColor),
+                    child: Text(
+                      str,
+                      style: Theme.of(context).textTheme.titleMedium!.apply(
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
                 }),
                 const SizedBox(height: VSizes.spaceBtwItems),
                 const Divider(),
@@ -156,12 +160,13 @@ class ContainerScreen extends StatelessWidget {
                       homeController.dataService.isEnglish.value =
                       !homeController.dataService.isEnglish.value;
                       VToast.showToastBar(
-                          title: homeController.dataService.isEnglish.value
-                              ? 'Application Language'
-                              : 'لغة التطبيق',
-                          message: homeController.dataService.isEnglish.value
-                              ? 'Language is changed to English'
-                              : 'تم تغيير اللغة إلى العربية');
+                        title: homeController.dataService.isEnglish.value
+                            ? 'Application Language'
+                            : 'لغة التطبيق',
+                        message: homeController.dataService.isEnglish.value
+                            ? 'Language is changed to English'
+                            : 'تم تغيير اللغة إلى العربية',
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(VSizes.xs),
@@ -171,7 +176,8 @@ class ContainerScreen extends StatelessWidget {
                               size: 30, color: Colors.white),
                           const SizedBox(width: VSizes.md),
                           Expanded(
-                              child: Obx(() => Text(
+                            child: Obx(
+                                  () => Text(
                                 homeController.dataService.isEnglish.value
                                     ? 'Application Language'
                                     : 'لغة التطبيق',
@@ -179,7 +185,9 @@ class ContainerScreen extends StatelessWidget {
                                     .textTheme
                                     .titleMedium!
                                     .apply(color: Colors.white),
-                              ))),
+                              ),
+                            ),
+                          ),
                           const Icon(Icons.arrow_forward_ios_sharp,
                               color: Colors.white),
                         ],
@@ -194,7 +202,6 @@ class ContainerScreen extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        print('selected index: ${homeController.selectedIndex.value}');
         return homeController.viewList[homeController.selectedIndex.value];
       }),
       bottomNavigationBar: Obx(() {
@@ -206,31 +213,24 @@ class ContainerScreen extends StatelessWidget {
               icon: const Icon(Icons.home, color: Colors.white),
               label: homeController.dataService.isEnglish.value ? 'Home' : 'بيت',
             ),
-
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
               icon: const Icon(Icons.layers_outlined, color: Colors.white),
               label:
               homeController.dataService.isEnglish.value ? 'Genres' : 'الأنواع',
             ),
-
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
               icon: const Icon(Icons.calendar_month, color: Colors.white),
               label:
               homeController.dataService.isEnglish.value ? 'Weekly' : 'أسبوعي',
             ),
-
-
-
-            //Upcoming
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
               icon: const Icon(Icons.timer, color: Colors.white),
               label:
               homeController.dataService.isEnglish.value ? 'Upcoming' : 'قادم',
             ),
-
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
               icon: const Icon(Icons.menu_book_outlined, color: Colors.white),
@@ -244,16 +244,19 @@ class ContainerScreen extends StatelessWidget {
           unselectedItemColor: Colors.white.withOpacity(0.6),
           backgroundColor: Colors.black,
           onTap: (index) async {
-            if (index == 3) {
-              final loggedIn =
-                  homeController.dataService.user.value.display_name.isNotEmpty;
-              if (!loggedIn) {
-                await homeController.showLoginAndSignUp(true);
+            if (index >= 0 && index < homeController.viewList.length) {
+              if (index == 3) { // "Library" tab is index 4
+                final loggedIn = homeController.dataService.user.value.display_name.isNotEmpty;
+                if (!loggedIn) {
+                  await homeController.showLoginAndSignUp(true);
+                } else {
+                  homeController.selectedIndex.value = index;
+                }
               } else {
                 homeController.selectedIndex.value = index;
               }
             } else {
-              homeController.selectedIndex.value = index;
+              print('Invalid index tapped: $index');
             }
           },
         );

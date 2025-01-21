@@ -5,6 +5,7 @@ import 'package:amlportal/screens/library_screen.dart';
 import 'package:amlportal/screens/home_screen.dart';
 import 'package:amlportal/screens/sign_in_screen.dart';
 import 'package:amlportal/screens/sign_up_screen.dart';
+import 'package:amlportal/screens/upcoming_screen.dart';
 import 'package:amlportal/screens/weekly_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +35,9 @@ class ContainerController extends GetxController {
       const HomeScreen(),
       const WeeklyScreen(),
       const GenreScreen(),
-      const LibraryScreen()
+      const UpcomingScreen(),
+      const LibraryScreen(),
+
     ];
   }
 

@@ -1,6 +1,7 @@
 import 'package:amlportal/controllers/weekly_controller.dart';
 import 'package:amlportal/customs/v_sizes.dart';
 import 'package:amlportal/widgets/comic_card.dart';
+import 'package:amlportal/widgets/comic_vertical_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -45,7 +46,7 @@ class WeeklyScreen extends StatelessWidget {
                           return Padding(
                             padding:
                             const EdgeInsets.only(right: VSizes.xs),
-                            child: ComicCard(comic: weeklyController.comicList[index], horizontal: false,),
+                            child: ComicVerticalCard(comic: weeklyController.comicList[index],),
                           );
                         });
                   }
