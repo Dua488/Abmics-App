@@ -13,6 +13,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../customs/v_shimmer.dart';
 import '../widgets/comic_card_with_title.dart';
+import '../widgets/vertical_card_with_section.dart';
 import 'episode_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -147,7 +148,8 @@ class HomeScreen extends StatelessWidget {
                       return const SizedBox(height: 0.0,);
                     }
                     else{
-                      return ComicHorizontalListWithSection(title: homeController.dataService.isEnglish.value ? "Popular Comics" : "كاريكاتير شعبية", comicList: homeController.popularComicList);
+                      return ComicVerticalGridWithSection(title: homeController.dataService.isEnglish.value ? "Popular Comics" : "كاريكاتير شعبية", comicList: homeController.popularComicList);
+
                     }
 
                   }),

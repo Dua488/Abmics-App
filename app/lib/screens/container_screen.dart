@@ -25,36 +25,29 @@ class ContainerScreen extends StatelessWidget {
       endDrawerEnableOpenDragGesture: false,
       appBar: AppBar(
         backgroundColor: Colors.black, // Header color set to black
-        title: Center(
-          child: Obx(
-                () => Text(
-              homeController.dataService.user.value.display_name.isEmpty
-                  ? 'ABMICS'
-                  : homeController.dataService.user.value.display_name,
-              style: Theme.of(context).textTheme.titleLarge!.apply(
-                color: Colors.white,
-                fontFamily: 'Corsiva',
-                fontWeightDelta: 15,
-              ),
+
+        title: SizedBox(
+          
+          height: 90, // Adjust the height
+          child: IconButton(
+            onPressed: () async {
+              final url = Uri.parse("https://abmics.com/");
+              await launchUrl(url);
+            },
+            icon: Image.asset(
+              'assets/abmics_logo.png',
+              fit: BoxFit.contain, // Ensures the logo scales properly
             ),
           ),
         ),
-        leading: IconButton(
-          onPressed: () async {
-            final url = Uri.parse("https://abmics.com/");
-            await launchUrl(url);
-          },
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image.asset('assets/icon.png'),
-          ),
-        ),
+        centerTitle: true, // Center the logo in the AppBar
+      
         actions: [
           Obx(
                 () => TextButton(
               style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                   side: BorderSide(
                     color: homeController.dataService.isFamilySafe.value
                         ? Colors.red
@@ -82,6 +75,15 @@ class ContainerScreen extends StatelessWidget {
               ),
             ),
           ),
+
+          IconButton(
+            onPressed: () {
+             //
+            },
+            icon: const Icon(Icons.wallet_giftcard_outlined, color: Colors.white),
+          ),
+
+
           IconButton(
             onPressed: () {
               Get.to(() => const SearchScreen());
