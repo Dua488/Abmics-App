@@ -50,15 +50,20 @@ class ContainerScreen extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                   side: BorderSide(
                     color: homeController.dataService.isFamilySafe.value
-                        ? Colors.red
-                        : Colors.white,
+                        ? Colors.green // Default to green if family safe is active
+                        : Colors.white, // Change to white if family safe is inactive
                     width: 3,
                   ),
                 ),
               ),
-              onPressed: () {
-                homeController.dataService.setFamilySafe(
-                    !homeController.dataService.isFamilySafe.value);
+              onPressed: () async {
+                // Toggle family safe value
+                bool newFamilySafeValue = !homeController.dataService.isFamilySafe.value;
+                homeController.dataService.setFamilySafe(newFamilySafeValue);
+
+                // Send request to the API
+                int familySafeValue = newFamilySafeValue ? 1 : 0;
+                await homeController.dataService.isFamilySafe();
               },
               child: Obx(
                     () => Text(
@@ -68,13 +73,14 @@ class ContainerScreen extends StatelessWidget {
                           : 'عائلة آمنة'),
                   style: Theme.of(context).textTheme.titleMedium!.apply(
                     color: homeController.dataService.isFamilySafe.value
-                        ? Colors.red
-                        : Colors.white,
+                        ? Colors.green // Default text color for active state
+                        : Colors.white, // Text color for inactive state
                   ),
                 ),
               ),
             ),
           ),
+
 
           IconButton(
             onPressed: () {
