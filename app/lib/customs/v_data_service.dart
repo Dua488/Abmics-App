@@ -83,6 +83,7 @@ class VDataService extends GetxController {
       print('dio data : ${e.response?.data!}');
       VToast.showToastBar(title: isEnglish.value ? 'Internet Problem' : 'مشكلة الانترنت', message: isEnglish.value ? 'Check your connection' : 'التحقق من اتصالك', error: true);
       throw e.message.toString();
+      
     }
   }
 

@@ -33,8 +33,8 @@ class ContainerController extends GetxController {
     super.onInit();
     viewList = [
       const HomeScreen(),
-      const WeeklyScreen(),
       const GenreScreen(),
+      const WeeklyScreen(),
       const UpcomingScreen(),
       const LibraryScreen(),
 

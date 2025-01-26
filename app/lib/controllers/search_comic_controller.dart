@@ -12,6 +12,15 @@ class SearchComicController extends GetxController{
   final searchBarController = TextEditingController();
   RxList<ComicModel> comicList = <ComicModel>[].obs;
   RxBool showClearButton = false.obs;
+  RxList<ComicModel> filteredComics = <ComicModel>[].obs; // Filtered results
+  RxString searchQuery = ''.obs; // Current search query
+
+
+  @override
+  void onInit() {
+    super.onInit();
+    searchQuery.value = '';}
+
 
   searchComic() async{
     final formData = fd.FormData.fromMap({
@@ -37,6 +46,24 @@ class SearchComicController extends GetxController{
 
     }catch (e){
       VToast.showToastBar(title: e.toString(), error: true);
+    }
+  }
+
+
+  // Filter comics based on search query
+  void filterComics() {
+    if (searchQuery.value.isEmpty) {
+      // Show default results if search query is empty
+      filteredComics.value = comicList;
+    } else {
+      // Filter comics by matching titles
+      filteredComics.value = comicList
+          .where((comic) => comic.title_en
+
+
+          .toLowerCase()
+          .contains(searchQuery.value.toLowerCase()))
+          .toList();
     }
   }
 }

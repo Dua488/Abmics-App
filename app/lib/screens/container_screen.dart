@@ -253,7 +253,7 @@ class ContainerScreen extends StatelessWidget {
           backgroundColor: Colors.black,
           onTap: (index) async {
             if (index >= 0 && index < homeController.viewList.length) {
-              if (index == 3) { // "Library" tab is index 4
+              if (index == 5) { // "Library" tab is index 4
                 final loggedIn = homeController.dataService.user.value.display_name.isNotEmpty;
                 if (!loggedIn) {
                   await homeController.showLoginAndSignUp(true);

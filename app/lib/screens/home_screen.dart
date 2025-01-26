@@ -38,97 +38,118 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(VSizes.xs),
               child: Column(
                 children: [
-                  Obx((){
-                    if(homeController.carouselList.isEmpty){
-                      //return const SizedBox(height: 0.0);
-                      return Center(child: Image.asset('assets/bg.png', opacity: const AlwaysStoppedAnimation(.1)));
-                    }
-                    else{
+                  Obx(() {
+                    if (homeController.carouselList.isEmpty) {
+                      return Center(
+                          child: Image.asset('assets/bg.png',
+                              opacity: const AlwaysStoppedAnimation(.1)));
+                    } else {
                       return SizedBox(
                         width: double.infinity,
-                        height: 250,
+                        height: 300, // Adjust height for vertical card design
                         child: Column(
                           children: [
                             Expanded(
-                                child: CarouselSlider(
-                                  carouselController: carouselController,
-                                  options: CarouselOptions(
-                                      onPageChanged: (index, reason){
-                                        homeController.carouselIndex.value = index;
-                                      },
-                                      viewportFraction: 1.0,
-                                      height: 200.0,
-                                      autoPlay: true,
-                                      enableInfiniteScroll: true,
-                                      autoPlayInterval: const Duration(seconds: 3)
-                                  ),
-                                  items: homeController.carouselList.map((i) {
-                                    return Builder(
-                                      builder: (BuildContext context) {
-                                        return InkWell(
-                                          onTap: (){
-                                            Get.to(()=> EpisodeScreen(comic: i));
-                                          },
-                                          child: Stack(
-                                            children:[
-                                              Container(
-                                                width: MediaQuery.of(context).size.width,
-                                                decoration: BoxDecoration(color: Colors.grey.withOpacity(0.3)),
-                                                child: CachedNetworkImage(
-                                                  fit: BoxFit.fitWidth,
-                                                  //imageUrl: "https://abmics.com/wp_image.php?url=https%3A%2F%2Fabmics.com%2Fwp-content%2Fuploads%2Fepisodes%2F128974%2F%D8%A7%D9%84%D9%81%D8%B5%D9%84-2-%D9%82%D8%B5%D8%A9-%D8%AC%D8%A7%D9%86%D8%A8%D9%8A%D8%A9-2-%D9%85%D9%86-%D9%85%D8%A7%D9%86%D8%AC%D8%A7-Kimetsu-No-Yaiba-Tomioka-Giyuu-Ga-1.png&w=600&h=300",//i.thumbnail,
-                                                  imageUrl: i.thumbnail,
-                                                  progressIndicatorBuilder:
-                                                      (context, url, downloadProgress) =>
-                                                  const VShimmerEffect(
-                                                      width: double.infinity, height: 200),
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.all(5.0),
-                                                alignment: Alignment.bottomCenter,
-                                                decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                    begin: Alignment.topCenter,
-                                                    end: Alignment.bottomCenter,
-                                                    colors: <Color>[
-                                                      Colors.black.withAlpha(0),
-                                                      Colors.black12,
-                                                      Colors.black87
-                                                    ],
+                              child: CarouselSlider(
+                                carouselController: carouselController,
+                                options: CarouselOptions(
+                                    onPageChanged: (index, reason) {
+                                      homeController.carouselIndex.value = index;
+                                    },
+                                    viewportFraction: 0.8, // Adjust to show partial next card
+                                    height: 250.0,
+                                    autoPlay: true,
+                                    enableInfiniteScroll: true,
+                                    autoPlayInterval: const Duration(seconds: 3)),
+                                items: homeController.carouselList.map((i) {
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return InkWell(
+                                        onTap: () {
+                                          Get.to(() => EpisodeScreen(comic: i));
+                                        },
+                                        child: Card(
+                                          elevation: 5,
+                                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(0)),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              // Episode Image
+                                              Expanded(
+                                                flex: 3,
+                                                child: ClipRRect(
+                                                  borderRadius: const BorderRadius.vertical(
+                                                      top: Radius.circular(0)),
+                                                  child: CachedNetworkImage(
+                                                    fit: BoxFit.cover,
+                                                    imageUrl: i.thumbnail,
+                                                    progressIndicatorBuilder:
+                                                        (context, url, downloadProgress) =>
+                                                    const VShimmerEffect(
+                                                        width: double.infinity,
+                                                        height: 150),
                                                   ),
                                                 ),
-                                                child: Text(
-                                                  textAlign: TextAlign.left,
-                                                  homeController.dataService.isEnglish.value ? i.title_en: i.title_ar,
-                                                  style: const TextStyle(color: Colors.white, fontSize: 20.0),
+                                              ),
+                                              // Title of the Episode
+                                              Expanded(
+                                                flex: 1,
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(10.0),
+                                                  alignment: Alignment.centerLeft,
+                                                  decoration: const BoxDecoration(
+                                                    borderRadius: BorderRadius.vertical(
+                                                        bottom: Radius.circular(0)),
+                                                    color: Colors.black,
+                                                  ),
+                                                  child: Text(
+                                                    homeController.dataService.isEnglish.value
+                                                        ? i.title_en
+                                                        : i.title_ar,
+                                                    style: const TextStyle(
+                                                        color: Colors.white, fontSize: 16.0),
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        );
-                                      },
-                                    );
-                                  }).toList(),
-                                )),
-                            const SizedBox(height: VSizes.spaceBtwItems,),
-                            homeController.carouselList.length > 1 ? Center(
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: VSizes.spaceBtwItems,
+                            ),
+                            homeController.carouselList.length > 1
+                                ? Center(
                               child: AnimatedSmoothIndicator(
-                                onDotClicked: (index){
+                                onDotClicked: (index) {
                                   // _controller.jumpToPage(index);
                                 },
                                 activeIndex: homeController.carouselIndex.value,
                                 count: homeController.carouselList.length,
-                                effect: const ExpandingDotsEffect(activeDotColor: Colors.green, dotHeight: 6),
+                                effect: const ExpandingDotsEffect(
+                                    activeDotColor: Colors.green, dotHeight: 6),
                               ),
-                            ) : const SizedBox(width: 0,),
+                            )
+                                : const SizedBox(width: 0),
                             const Divider(),
-                            const SizedBox(height: VSizes.spaceBtwItems,),
+                            const SizedBox(
+                              height: VSizes.spaceBtwItems,
+                            ),
                           ],
                         ),
                       );
                     }
                   }),
+
 
 
 

@@ -1,9 +1,7 @@
-
-import 'package:amlportal/customs/v_sizes.dart';
-import 'package:amlportal/models/episode_model.dart';
-import 'package:amlportal/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:amlportal/models/episode_model.dart';
+import 'package:amlportal/screens/detail_screen.dart';
 
 class EpisodeCart extends StatelessWidget {
   const EpisodeCart({super.key, required this.episode});
@@ -11,39 +9,49 @@ class EpisodeCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.black12.withOpacity(0.1),
-      child: Padding(
-        padding: const EdgeInsets.all(VSizes.xs),
-        child: InkWell(
-          onTap: (){
-            Get.to(()=> DetailScreen(episode: episode,));
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            Get.to(() => DetailScreen(episode: episode));
           },
           child: Container(
-            height: 100,
-            child: Padding(
-              padding: const EdgeInsets.only(left: VSizes.md, right: VSizes.md),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(maxLines: 2, overflow: TextOverflow.ellipsis,episode.episode_title, style: Theme.of(context)
+            color: Colors.black, // Black background
+            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Title
+                Expanded(
+                  child: Text(
+                    episode.episode_title, // Title
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
                         .textTheme
-                        .titleLarge!
-                        .apply(color: Colors.black),),
+                        .titleMedium!
+                        .apply(color: Colors.white),
                   ),
-                  Text(episode.points, style: Theme.of(context)
+                ),
+                // Number
+                Text(
+                  '#${episode.points}', // Number
+                  style: Theme.of(context)
                       .textTheme
                       .titleMedium!
-                      .apply(color: Colors.white),)
-                ],
-              ),
+                      .apply(color: Colors.white),
+                ),
+              ],
             ),
           ),
         ),
-      ),
+        // Divider
+        Divider(
+          color: Colors.white, // White line between rows
+          thickness: 1.0,
+          height: 1.0,
+        ),
+      ],
     );
   }
 }
