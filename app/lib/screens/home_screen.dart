@@ -51,96 +51,81 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: CarouselSlider(
-                                carouselController: carouselController,
-                                options: CarouselOptions(
-                                    onPageChanged: (index, reason) {
-                                      homeController.carouselIndex.value = index;
-                                    },
-                                    viewportFraction: 0.8, // Adjust to show partial next card
-                                    height: 250.0,
-                                    autoPlay: true,
-                                    enableInfiniteScroll: true,
-                                    autoPlayInterval: const Duration(seconds: 3)),
-                                items: homeController.carouselList.map((i) {
-                                  return Builder(
-                                    builder: (BuildContext context) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Get.to(() => EpisodeScreen(comic: i));
-                                        },
-                                        child: Card(
-                                          elevation: 5,
-                                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(0)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              // Episode Image
-                                              Expanded(
-                                                flex: 3,
-                                                child: ClipRRect(
-                                                  borderRadius: const BorderRadius.vertical(
-                                                      top: Radius.circular(0)),
-                                                  child: CachedNetworkImage(
-                                                    fit: BoxFit.cover,
-                                                    imageUrl: i.thumbnail,
-                                                    progressIndicatorBuilder:
-                                                        (context, url, downloadProgress) =>
-                                                    const VShimmerEffect(
-                                                        width: double.infinity,
-                                                        height: 150),
-                                                  ),
-                                                ),
-                                              ),
-                                              // Title of the Episode
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  padding: const EdgeInsets.all(10.0),
-                                                  alignment: Alignment.centerLeft,
-                                                  decoration: const BoxDecoration(
-                                                    borderRadius: BorderRadius.vertical(
-                                                        bottom: Radius.circular(0)),
-                                                    color: Colors.black,
-                                                  ),
-                                                  child: Text(
-                                                    homeController.dataService.isEnglish.value
-                                                        ? i.title_en
-                                                        : i.title_ar,
-                                                    style: const TextStyle(
-                                                        color: Colors.white, fontSize: 16.0),
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                        carouselController: carouselController,
+                          options: CarouselOptions(
+                            onPageChanged: (index, reason) {
+                              homeController.carouselIndex.value = index;
+                            },
+                            viewportFraction: 1.0, // Makes each item take the full width
+                            height: 300.0, // Adjust height as needed
+                            autoPlay: true,
+                            enableInfiniteScroll: true,
+                            autoPlayInterval: const Duration(seconds: 3),
+                          ),
+                          items: homeController.carouselList.map((i) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return InkWell(
+                                  onTap: () {
+                                    Get.to(() => EpisodeScreen(comic: i));
+                                  },
+                                  child: ClipRRect(
+
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: i.thumbnail,
+                                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          const VShimmerEffect(width: double.infinity, height: 300),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.bottomLeft,
+                                          padding: const EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                                            ),
+                                          ),
+                                          child: Text(
+                                            homeController.dataService.isEnglish.value ? i.title_en : i.title_ar,
+                                            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                      );
-                                    },
-                                  );
-                                }).toList(),
-                              ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
                             ),
-                            const SizedBox(
-                              height: VSizes.spaceBtwItems,
-                            ),
-                            homeController.carouselList.length > 1
-                                ? Center(
-                              child: AnimatedSmoothIndicator(
-                                onDotClicked: (index) {
-                                  // _controller.jumpToPage(index);
-                                },
-                                activeIndex: homeController.carouselIndex.value,
-                                count: homeController.carouselList.length,
-                                effect: const ExpandingDotsEffect(
-                                    activeDotColor: Colors.green, dotHeight: 6),
-                              ),
-                            )
-                                : const SizedBox(width: 0),
-                            const Divider(),
+
+                        // const SizedBox(
+                        //       height: VSizes.spaceBtwItems,
+                        //     ),
+                        //     homeController.carouselList.length > 1
+                        //         ? Center(
+                        //       child: AnimatedSmoothIndicator(
+                        //         onDotClicked: (index) {
+                        //           // _controller.jumpToPage(index);
+                        //         },
+                        //         activeIndex: homeController.carouselIndex.value,
+                        //         count: homeController.carouselList.length,
+                        //         effect: const ExpandingDotsEffect(
+                        //             activeDotColor: Colors.green, dotHeight: 6),
+                        //       ),
+                        //     )
+                        //         : const SizedBox(width: 0),
+                        //     const Divider(),
+
+
                             const SizedBox(
                               height: VSizes.spaceBtwItems,
                             ),
@@ -160,7 +145,7 @@ class HomeScreen extends StatelessWidget {
                       return const SizedBox(height: 0.0,);
                     }
                     else{
-                      return ComicHorizontalListWithSection(title: homeController.dataService.isEnglish.value ? "New Comics" : "كاريكاتير جديد", comicList: homeController.recentComicList);
+                      return ComicVerticalGridWithSection(title: homeController.dataService.isEnglish.value ? "New Comics" : "كاريكاتير جديد", comicList: homeController.recentComicList);
                     }
                   }),
                   const SizedBox(height: VSizes.spaceBtwItems,),

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:amlportal/customs/v_data_service.dart';
 import 'package:amlportal/customs/v_shimmer.dart';
 import 'package:amlportal/customs/v_sizes.dart';
@@ -23,23 +21,21 @@ class ComicCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(VSizes.xs),
         child: InkWell(
-          onTap: (){
-            Get.to(()=> EpisodeScreen(comic: comic));
+          onTap: () {
+            Get.to(() => EpisodeScreen(comic: comic));
           },
           child: SizedBox(
             width: horizontal ? 150 : double.infinity,
             height: 220,
             child: Stack(
               children: [
-                Container(
+                CachedNetworkImage(
                   width: horizontal ? 150 : double.infinity,
                   height: 220,
-                  child: comic.thumbnail.isEmpty ? Image.asset('assets/icon.png'): CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: comic.thumbnail ,
-                    //imageUrl: 'https://fintech.fsa.gov.kh/img/logo_fsaV1.png',
-                    progressIndicatorBuilder: (context, url, downloadProgress) => VShimmerEffect(width: horizontal ? 150 : double.infinity, height: 220),
-                  ),
+                  fit: BoxFit.cover,
+                  imageUrl: comic.thumbnail.isEmpty ? 'assets/icon.png' : comic.thumbnail,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      VShimmerEffect(width: horizontal ? 150 : double.infinity, height: 220),
                 ),
                 Container(
                   padding: const EdgeInsets.all(5.0),
@@ -58,23 +54,32 @@ class ComicCard extends StatelessWidget {
                   child: Text(
                     maxLines: 3,
                     dataService.isEnglish.value ? comic.title_en : comic.title_ar,
-                    style: Theme.of(context).textTheme.titleSmall!.apply(fontWeightDelta: 10, color: Colors.green),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.green,
+                      fontSize: 12, // Reduced font size for smaller text
+                    ),
                   ),
                 ),
                 Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      child: Center(
-                        child: Text(comic.status, style: Theme.of(context).textTheme.titleSmall!.apply(fontWeightDelta: 10, color: Colors.white),),
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.deepOrangeAccent,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: Text(
+                      comic.status,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 10, // Reduced font size to fit dynamically
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.deepOrangeAccent,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      width: 70,
-                      height: 25,
-                    ))
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -83,5 +88,3 @@ class ComicCard extends StatelessWidget {
     );
   }
 }
-
-

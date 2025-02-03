@@ -28,7 +28,7 @@ class ContainerScreen extends StatelessWidget {
 
         title: SizedBox(
           
-          height: 90, // Adjust the height
+          height: 120, // Adjust the height
           child: IconButton(
             onPressed: () async {
               final url = Uri.parse("https://abmics.com/");
@@ -46,13 +46,14 @@ class ContainerScreen extends StatelessWidget {
           Obx(
                 () => TextButton(
               style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 shape: RoundedRectangleBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                   side: BorderSide(
                     color: homeController.dataService.isFamilySafe.value
                         ? Colors.green // Default to green if family safe is active
                         : Colors.white, // Change to white if family safe is inactive
-                    width: 3,
+                    width: 2,
                   ),
                 ),
               ),
@@ -71,7 +72,7 @@ class ContainerScreen extends StatelessWidget {
                       (homeController.dataService.isEnglish.value
                           ? 'Family Safe'
                           : 'عائلة آمنة'),
-                  style: Theme.of(context).textTheme.titleMedium!.apply(
+                  style: Theme.of(context).textTheme.titleSmall!.apply(
                     color: homeController.dataService.isFamilySafe.value
                         ? Colors.green // Default text color for active state
                         : Colors.white, // Text color for inactive state
