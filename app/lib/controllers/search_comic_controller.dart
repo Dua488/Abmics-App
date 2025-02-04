@@ -6,64 +6,77 @@ import '../customs/v_toast.dart';
 import '../models/comic_model.dart';
 import 'package:dio/src/form_data.dart' as fd;
 
-class SearchComicController extends GetxController{
+class SearchComicController extends GetxController {
   static SearchComicController get instance => Get.find();
   final dataService = VDataService.instance;
   final searchBarController = TextEditingController();
-  RxList<ComicModel> comicList = <ComicModel>[].obs;
-  RxBool showClearButton = false.obs;
-  RxList<ComicModel> filteredComics = <ComicModel>[].obs; // Filtered results
-  RxString searchQuery = ''.obs; // Current search query
 
+  RxList<ComicModel> comicList = <ComicModel>[].obs;
+  RxList<ComicModel> filteredComics = <ComicModel>[].obs; // Filtered results
+  RxBool showClearButton = false.obs;
+  RxString searchQuery = ''.obs; // Current search query
 
   @override
   void onInit() {
     super.onInit();
-    searchQuery.value = '';}
+    searchQuery.value = '';
 
+    // Attach listener to search bar controller
+    searchBarController.addListener(() {
+      searchQuery.value = searchBarController.text;
+    });
 
-  searchComic() async{
+    // Auto-filter comics when searchQuery changes
+    ever(searchQuery, (_) => filterComics());
+  }
+
+  Future<void> searchComic() async {
     final formData = fd.FormData.fromMap({
       'action': 'abcomics_get_search',
-      's': searchBarController.value.text,
-      'family_safe': dataService.isFamilySafe.value ? 'true' : 'false'
+      's': searchQuery.value,
+      'family_safe': dataService.isFamilySafe.value ? 'true' : 'false',
     });
-    try{
+
+    try {
       final isConnected = await VNetworkManager.instance.isConnected();
-      if (!isConnected){
-        VToast.showToastBar(title: dataService.isEnglish.value ? 'Internet Problem' : 'مشكلة الانترنت', message: dataService.isEnglish.value ? 'Check your connection' : 'التحقق من اتصالك', error: true);
+      if (!isConnected) {
+        VToast.showToastBar(
+          title: dataService.isEnglish.value ? 'Internet Problem' : 'مشكلة الانترنت',
+          message: dataService.isEnglish.value ? 'Check your connection' : 'التحقق من اتصالك',
+          error: true,
+        );
         return;
       }
+
       final response = await dataService.requestData(formData);
       final dataList = response['data']['items'] as List;
-      //
-      print('number of comic page : ${response['data']['paged'].toString()}');
-      print('number of comic totla : ${response['data']['total'].toString()}');
-      //
-      final allList = dataList.map((item) => ComicModel.fromJson(item)).toList();
-      comicList.assignAll(allList);
-      print('number of comic : ${comicList.length}');
 
-    }catch (e){
+      print('Number of comic pages: ${response['data']['paged']}');
+      print('Total comics found: ${response['data']['total']}');
+
+      comicList.assignAll(dataList.map((item) => ComicModel.fromJson(item)).toList());
+      print('Number of comics: ${comicList.length}');
+
+      // Refresh filtered list
+      filterComics();
+    } catch (e) {
       VToast.showToastBar(title: e.toString(), error: true);
     }
   }
 
-
-  // Filter comics based on search query
   void filterComics() {
     if (searchQuery.value.isEmpty) {
-      // Show default results if search query is empty
-      filteredComics.value = comicList;
+      filteredComics.assignAll(comicList);
     } else {
-      // Filter comics by matching titles
-      filteredComics.value = comicList
-          .where((comic) => comic.title_en
-
-
-          .toLowerCase()
-          .contains(searchQuery.value.toLowerCase()))
-          .toList();
+      filteredComics.assignAll(
+        comicList.where((comic) => comic.title_en.toLowerCase().contains(searchQuery.value.toLowerCase())).toList(),
+      );
     }
+  }
+
+  @override
+  void onClose() {
+    searchBarController.dispose();
+    super.onClose();
   }
 }

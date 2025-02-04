@@ -1,4 +1,6 @@
 import 'package:amlportal/controllers/search_comic_controller.dart';
+import 'package:amlportal/screens/container_screen.dart';
+import 'package:amlportal/screens/home_screen.dart';
 import 'package:amlportal/widgets/comic_vertical_card.dart';
 import 'package:amlportal/widgets/verticalstraightCard.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,6 @@ import '../widgets/comic_card.dart';
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final dataService = VDataService.instance;
@@ -25,43 +26,49 @@ class SearchScreen extends StatelessWidget {
     final homeController = Get.put(ContainerController());
     GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
-    _handleDrawer() async {
-      _key.currentState!.openEndDrawer();
+
+
+     _handleDrawer()  async{
+      if (_key.currentState?.isEndDrawerOpen == false) {
+        _key.currentState?.openEndDrawer();
+      }
     }
 
+
     return Scaffold(
+      key: _key,
       backgroundColor: Colors.black,
-      appBar:  AppBar(
+      appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black, // Header color set to black
 
         title: SizedBox(
-
-          height: 90, // Adjust the height
+          height: 120,
           child: IconButton(
             onPressed: () async {
-              final url = Uri.parse("https://abmics.com/");
-              await launchUrl(url);
+              Get.offAll(() => const ContainerScreen());  // Replace with your main page widget
             },
             icon: Image.asset(
               'assets/abmics_logo.png',
-              fit: BoxFit.contain, // Ensures the logo scales properly
+              fit: BoxFit.contain,
             ),
           ),
         ),
-        centerTitle: true, // Center the logo in the AppBar
+        centerTitle: true,
+
 
         actions: [
           Obx(
                 () => TextButton(
               style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 shape: RoundedRectangleBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                   side: BorderSide(
                     color: homeController.dataService.isFamilySafe.value
                         ? Colors.green // Default to green if family safe is active
                         : Colors.white, // Change to white if family safe is inactive
-                    width: 3,
+                    width: 2,
                   ),
                 ),
               ),
@@ -80,7 +87,7 @@ class SearchScreen extends StatelessWidget {
                       (homeController.dataService.isEnglish.value
                           ? 'Family Safe'
                           : 'عائلة آمنة'),
-                  style: Theme.of(context).textTheme.titleMedium!.apply(
+                  style: Theme.of(context).textTheme.titleSmall!.apply(
                     color: homeController.dataService.isFamilySafe.value
                         ? Colors.green // Default text color for active state
                         : Colors.white, // Text color for inactive state
@@ -126,7 +133,7 @@ class SearchScreen extends StatelessWidget {
                   children: [
                     IconButton(
                         onPressed: () {
-                          _key.currentState!.closeEndDrawer();
+                          _key.currentState?.closeEndDrawer();
                         },
                         icon: const Icon(Icons.close, color: Colors.white))
                   ],
@@ -227,13 +234,12 @@ class SearchScreen extends StatelessWidget {
         },
         child: SingleChildScrollView(
           child: Column(
-
             children: [
               const Divider(),
 
               SizedBox(height: 10,),
 
-            // Search Bar
+              // Search Bar
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -245,16 +251,16 @@ class SearchScreen extends StatelessWidget {
                         searchComicController.searchQuery.value = value;
                         searchComicController.filterComics();
                       },
-                      style: const TextStyle(color: Colors.white), // White text color
+                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.black, // Background color set to black
+                        fillColor: Colors.black,
                         hintText: 'Search abmic/author',
-                        hintStyle: const TextStyle(color: Colors.white54), // Hint text style
+                        hintStyle: const TextStyle(color: Colors.white54),
                         suffixIcon: const Icon(Icons.search, color: Colors.white),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0), // Circular border
-                          borderSide: const BorderSide(color: Colors.white, width: 1.5), // White border
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: const BorderSide(color: Colors.white, width: 1.5),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
@@ -281,12 +287,9 @@ class SearchScreen extends StatelessWidget {
                 ],
               ),
 
-
               SizedBox(height: 5,),
-              
+
               Text("Top Abmic Searched", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),),
-
-
 
               Padding(
                 padding: const EdgeInsets.all(VSizes.sm),
@@ -310,26 +313,10 @@ class SearchScreen extends StatelessWidget {
                   }
                 }),
               ),
-
             ],
           ),
         ),
       ),
     );
-  }
-}
-
-class MyColor extends WidgetStateColor {
-  const MyColor() : super(_defaultColor);
-
-  static const int _defaultColor = 0xcafefeed;
-  static const int _pressedColor = 0xdeadbeef;
-
-  @override
-  Color resolve(Set<WidgetState> states) {
-    if (states.contains(WidgetState.pressed)) {
-      return const Color(_pressedColor);
-    }
-    return const Color(_defaultColor);
   }
 }
