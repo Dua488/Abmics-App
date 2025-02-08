@@ -219,38 +219,38 @@ class ContainerScreen extends StatelessWidget {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
-              icon: const Icon(Icons.home, color: Colors.white),
+              icon: Icon(Icons.home,
+                  color: homeController.selectedIndex.value == 0 ? Colors.green : Colors.white),
               label: homeController.dataService.isEnglish.value ? 'Home' : 'بيت',
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
-              icon: const Icon(Icons.layers_outlined, color: Colors.white),
-              label:
-              homeController.dataService.isEnglish.value ? 'Genres' : 'الأنواع',
+              icon: Icon(Icons.layers_outlined,
+                  color: homeController.selectedIndex.value == 1 ? Colors.green : Colors.white),
+              label: homeController.dataService.isEnglish.value ? 'Genres' : 'الأنواع',
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
-              icon: const Icon(Icons.calendar_month, color: Colors.white),
-              label:
-              homeController.dataService.isEnglish.value ? 'Weekly' : 'أسبوعي',
+              icon: Icon(Icons.calendar_month,
+                  color: homeController.selectedIndex.value == 2 ? Colors.green : Colors.white),
+              label: homeController.dataService.isEnglish.value ? 'Weekly' : 'أسبوعي',
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
-              icon: const Icon(Icons.timer, color: Colors.white),
-              label:
-              homeController.dataService.isEnglish.value ? 'Upcoming' : 'قادم',
+              icon: Icon(Icons.timer,
+                  color: homeController.selectedIndex.value == 3 ? Colors.green : Colors.white),
+              label: homeController.dataService.isEnglish.value ? 'Upcoming' : 'قادم',
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.black,
-              icon: const Icon(Icons.menu_book_outlined, color: Colors.white),
-              label: homeController.dataService.isEnglish.value
-                  ? 'Library'
-                  : 'مكتبة',
+              icon: Icon(Icons.menu_book_outlined,
+                  color: homeController.selectedIndex.value == 4 ? Colors.green : Colors.white),
+              label: homeController.dataService.isEnglish.value ? 'Library' : 'مكتبة',
             ),
           ],
           currentIndex: homeController.selectedIndex.value,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white.withOpacity(0.6),
+          selectedItemColor: Colors.green, // Label color when selected
+          unselectedItemColor: Colors.white, // Label color when unselected
           backgroundColor: Colors.black,
           onTap: (index) async {
             if (index >= 0 && index < homeController.viewList.length) {
@@ -270,6 +270,8 @@ class ContainerScreen extends StatelessWidget {
           },
         );
       }),
+
+
     );
   }
 }
