@@ -8,6 +8,7 @@ class ComicModel {
   String badge;
   String type;
   String status;
+  String views;
 
   ComicModel({
     required this.comic_id,
@@ -18,13 +19,15 @@ class ComicModel {
     required this.badge,
     required this.type,
     required this.status,
+    required this.views
   });
 
-  static ComicModel empty() => ComicModel(comic_id: '', title_en: '', title_ar: '', content: '', thumbnail: '', badge: '', type: '', status: '');
+  static ComicModel empty() => ComicModel(comic_id: '', title_en: '', title_ar: '', content: '', thumbnail: '', badge: '', type: '', status: '', views: '');
 
   factory ComicModel.fromJson(Map<String, dynamic>? document){
     if(document != null){
       return ComicModel(
+
           comic_id: document['comic_id'].toString(),
           title_en: document['en']['title'].toString(),
           title_ar: document['ar']['title'].toString(),
@@ -32,7 +35,12 @@ class ComicModel {
           thumbnail: document['thumbnail'].toString().toLowerCase() == 'false' ? '' : document['thumbnail'].toString(),
           badge: document['badge'].toString(),
           type: document['type'].toString(),
-          status: document['status'].toString());
+          status: document['status'].toString(),
+          views: document['views'].toString(),
+      );
+
+
+
     }
     else{
       return empty();

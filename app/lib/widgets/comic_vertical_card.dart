@@ -93,7 +93,7 @@ class ComicVerticalCard extends StatelessWidget {
                         const Icon(Icons.favorite, color: Colors.green, size: 16),
                         const SizedBox(width: 4),
                         Text(
-                          "1.5M",
+                          comic.views.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!

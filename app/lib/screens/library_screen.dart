@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../controllers/container_controller.dart';
 import '../customs/v_sizes.dart';
 import '../widgets/comic_card.dart';
 
@@ -12,6 +13,8 @@ class LibraryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.put(ContainerController());
+    GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
     final refreshController = RefreshController(initialRefresh: true);
     final libraryController = Get.put(LibraryController());
 
@@ -32,7 +35,9 @@ class LibraryScreen extends StatelessWidget {
         child: ListView(
           children: [
             Divider(color: Colors.white,),
-            Center(child: Text("My Library",style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)),
+            Center(child: Text((libraryController.dataService.isEnglish.value
+                ? 'My Library'
+                : 'مكتبتي'), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)),
 
             Obx(() {
               if (libraryController.comicList.isEmpty) {

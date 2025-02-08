@@ -62,6 +62,7 @@ class GenreScreen extends StatelessWidget {
                                 },
                                 child: Obx(() => Text(
                                   genreController.slugList[index].name,
+
                                   style: Theme.of(context).textTheme.titleSmall!.apply(
                                     color: genreController.selectedIndex.value == index
                                         ? Colors.green

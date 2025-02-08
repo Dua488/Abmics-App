@@ -9,45 +9,38 @@ import 'package:photo_view/photo_view_gallery.dart';
 class DetailCard extends StatelessWidget {
   const DetailCard({super.key, required this.strImg});
   final String strImg;
+
   @override
   Widget build(BuildContext context) {
-    print('stri img : ${strImg}');
+    print('stri img : $strImg');
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(VSizes.xs),
         child: InkWell(
-          onTap: (){
-
-          },
+          onTap: () {},
           child: Container(
-            width: VFunctionHelper.screenWidth() - VSizes.xs,
-            height: VFunctionHelper.screenHeight() - 200,
+            width: double.infinity, // Full screen width
+            height: 400, // Manually set height (adjust as needed)
             child: Padding(
-              padding: const EdgeInsets.only(top: VSizes.xs),
+              padding: const EdgeInsets.only(),
               child: Container(
-                width: VFunctionHelper.screenWidth() - VSizes.xs,
-                height: VFunctionHelper.screenHeight() - 200,
+                width: double.infinity, // Full width
+                height: 250, // Manually set height
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(0.0),
+
                   boxShadow: [
-                    BoxShadow(color: Colors.green, spreadRadius: 3),
+                    //BoxShadow(color: Colors.green, spreadRadius: 3),
                   ],
                 ),
-                // child: strImg.isEmpty ? Image.asset('assets/icon.png'): CachedNetworkImage(
-                //   fit: BoxFit.contain,
-                //   imageUrl: strImg ,
-                //   progressIndicatorBuilder: (context, url, downloadProgress) => VShimmerEffect(width: VFunctionHelper.screenWidth() - VSizes.xs, height: VFunctionHelper.screenHeight() - 200),
-                // ),
                 child: PhotoViewGallery.builder(
-                  backgroundDecoration: BoxDecoration(
-                    color: Colors.green[200],
+                  backgroundDecoration: const BoxDecoration(
+
                   ),
                   scrollPhysics: const BouncingScrollPhysics(),
                   builder: (BuildContext context, int index) {
                     return PhotoViewGalleryPageOptions(
                       imageProvider: NetworkImage(strImg),
-                      //initialScale: PhotoViewComputedScale.contained * 1.5,
                       initialScale: PhotoViewComputedScale.contained * 1,
                     );
                   },
